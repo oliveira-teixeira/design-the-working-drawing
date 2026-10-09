@@ -1,0 +1,446 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>The Working Drawing</title></head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 86rem shell, a facts column beside a reading column, the site's own nine type sizes. */
+:root {
+  color-scheme: light;
+  --ink: oklch(0.1908 0 0);
+  --paper: oklch(0.9911 0 0);
+  --vellum: oklch(0.9601 0 0);
+  --graphite: oklch(0.4386 0 0);
+  --hairline: oklch(0.9189 0 0);
+  --field-stroke: oklch(0.62 0 0);
+  --signal: oklch(0.646 0.184 45);
+  /* the site's own token names, so the component snippets bind live */
+  --foreground: var(--ink);
+  --background: var(--paper);
+  --secondary: var(--vellum);
+  --muted-foreground: var(--graphite);
+  --border: var(--hairline);
+  --input: var(--field-stroke);
+  --chart-1: var(--signal);
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+html { font-synthesis-weight: none; scroll-padding-top: 4.5rem; }
+body { background: var(--paper); color: var(--ink); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+.h1 { font-size:clamp(2.75rem, 6.5vw, 5rem);font-weight:400;line-height:0.94;letter-spacing:-0.035em; } .h2 { font-size:clamp(2rem, 4vw, 3.25rem);font-weight:400;line-height:0.98;letter-spacing:-0.03em; } .h3 { font-size:clamp(1.5rem, 2.4vw, 2rem);font-weight:500;line-height:1.1;letter-spacing:-0.02em; } .h4 { font-size:1.375rem;font-weight:500;line-height:1.2;letter-spacing:-0.015em; }
+.h5 { font-size:1.0625rem;font-weight:500;line-height:1.35;letter-spacing:-0.01em; } .h6 { font-size:0.9375rem;font-weight:500;line-height:1.4;letter-spacing:0em; } .body-lg { font-size:1.1875rem;font-weight:400;line-height:1.6;letter-spacing:-0.005em; } .body { font-size:0.9375rem;font-weight:400;line-height:1.65;letter-spacing:0em; }
+.tagline { font-size:0.6875rem;font-weight:500;line-height:1;letter-spacing:0.14em; text-transform: uppercase; color: var(--graphite); }
+h1, h2, h3, p, ul, figure { margin: 0; }
+h1, h2, h3 { text-wrap: balance; }
+.muted { color: var(--graphite); }
+strong { font-weight: 500; }
+code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.86em; background: var(--vellum); border-radius: 0.375rem; padding: 0.08em 0.36em; overflow-wrap: anywhere; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+
+.shell { max-width: 86rem; margin-inline: auto; padding-inline: 1.25rem; }
+@media (min-width: 768px) { .shell { padding-inline: 2rem; } }
+
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--hairline); }
+.top .shell { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 2rem; padding-block: 1rem; }
+.top nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+.top nav a { text-decoration: none; }
+.top nav a:hover { color: var(--ink); }
+
+.hero { padding-block: 4rem 3.5rem; display: grid; gap: 1.5rem; }
+.hero .h1 { max-width: 14ch; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; }
+
+section.block { border-top: 1px solid var(--hairline); padding-block: 3.5rem; display: grid; gap: 2rem; }
+@media (min-width: 640px) { section.block { padding-block: 5rem; } }
+@media (min-width: 1024px) {
+  section.block { grid-template-columns: 16rem minmax(0, 1fr); gap: 3rem; }
+  section.block > .head { position: sticky; top: 5.5rem; align-self: start; }
+}
+.head { display: grid; gap: 0.75rem; }
+.content { display: grid; gap: 1.5rem; min-width: 0; }
+.prose, .lead { max-width: 48rem; }
+p.prose { font-size:0.9375rem;font-weight:400;line-height:1.65;letter-spacing:0em; }
+.sub { margin-top: 0.5rem; }
+.list { display: grid; gap: 0.6rem; padding-left: 1.1rem; max-width: 48rem; font-size:0.9375rem;font-weight:400;line-height:1.65;letter-spacing:0em; }
+.list li::marker { color: var(--graphite); }
+.keys { display: grid; gap: 0.6rem; padding-left: 1.1rem; font-size:0.9375rem;font-weight:400;line-height:1.65;letter-spacing:0em; }
+
+.swatches { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+.swatch { display: grid; grid-template-rows: auto 1fr auto; gap: 1rem; min-width: 0; }
+.chip { aspect-ratio: 3 / 2; border-radius: 0.875rem; border: 1px solid var(--hairline); }
+.swatch-text { display: grid; gap: 0.4rem; align-content: start; }
+.value { font-size:0.9375rem;font-weight:400;line-height:1.65;letter-spacing:0em; }
+.ramp { display: grid; grid-template-columns: repeat(8, 1fr); height: 0.75rem; border-radius: 9999px; overflow: hidden; }
+
+.rules { display: grid; gap: 1px; background: var(--hairline); border-block: 1px solid var(--hairline); grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr)); }
+.rule { background: var(--paper); padding: 1.25rem 1.25rem 1.25rem 0; display: grid; gap: 0.4rem; align-content: start; }
+@media (min-width: 640px) { .rule { padding-inline: 0 1.5rem; } }
+
+.specimens { display: grid; border-top: 1px solid var(--hairline); }
+.specimen { display: grid; gap: 0.75rem; padding-block: 1.5rem; border-bottom: 1px solid var(--hairline); }
+@media (min-width: 768px) { .specimen { grid-template-columns: 11rem minmax(0, 1fr); gap: 2rem; } }
+.spec-meta { display: grid; gap: 0.4rem; align-content: start; }
+.spec-body { display: grid; gap: 0.6rem; min-width: 0; }
+.spec-sample { overflow-wrap: anywhere; }
+
+.split { display: grid; gap: 2rem; }
+@media (min-width: 1024px) { .split { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); } }
+.scale, .bps { list-style: none; padding: 0; display: grid; gap: 0.75rem; margin-top: 1rem; }
+.scale li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; align-items: center; gap: 1rem; }
+.bar-wrap { min-width: 0; overflow: hidden; }
+.bar { display: block; height: 0.75rem; max-width: 100%; background: var(--ink); border-radius: 9999px; }
+.bps li { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--hairline); padding-bottom: 0.6rem; font-variant-numeric: tabular-nums; }
+
+.shapes { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+.shapes figure { display: grid; gap: 0.75rem; align-content: start; }
+.shape-pill { font-size:0.9375rem;font-weight:500;line-height:1.4;letter-spacing:0em; display: inline-flex; align-items: center; justify-self: start; height: 3rem; padding: 0 2rem; border-radius: 9999px; background: var(--ink); color: var(--paper); }
+.shape-tile { aspect-ratio: 4 / 3; max-width: 100%; border-radius: 0.875rem; background: var(--vellum); }
+.shape-field { font-size:1.1875rem;font-weight:400;line-height:1.6;letter-spacing:-0.005em; display: flex; align-items: center; height: 3rem; padding: 0 1rem; border: 1px solid var(--field-stroke); border-radius: 0.625rem; color: var(--graphite); background: var(--paper); }
+
+.comps { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); }
+.comp { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+@media (min-width: 900px) { .comp.is-wide { grid-column: span 2; } }
+.stage { border: 1px solid var(--hairline); border-radius: 0.875rem; padding: 2rem 1.5rem; min-height: 9rem; display: grid; place-items: center; overflow-x: auto; background: var(--paper); }
+.stage > * { max-width: 100%; }
+.comp-text { display: grid; gap: 0.4rem; }
+.specs-title { margin-top: 1.5rem; }
+.spec-grid { display: grid; gap: 2rem; }
+@media (min-width: 900px) { .spec-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; } }
+.spec-block { display: grid; gap: 0.75rem; align-content: start; min-width: 0; }
+.spec-block .sub { margin: 0; }
+
+.dd { display: grid; gap: 2.5rem; }
+@media (min-width: 900px) { .dd { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.dd > div { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+
+footer { border-top: 1px solid var(--hairline); padding-block: 2.5rem 4rem; display: flex; flex-wrap: wrap; gap: 0.75rem 2rem; justify-content: space-between; }
+
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* component snippets from .impeccable/design.json, verbatim */
+.ds-btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; height: 3rem; padding: 0 2rem; border-radius: 9999px; background: var(--foreground, oklch(0.1908 0 0)); color: var(--background, oklch(0.9911 0 0)); font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; line-height: 1.4; font-weight: 500; text-decoration: none; transition: opacity 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary svg { transition: transform 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { opacity: 0.85; } .ds-btn-primary:hover svg { transform: translateX(2px); } .ds-btn-primary:focus-visible { outline: 2px solid var(--chart-1, oklch(0.646 0.184 45)); outline-offset: 3px; }
+.ds-btn-outline { display: inline-flex; align-items: center; gap: 0.5rem; height: 3rem; padding: 0 2rem; border-radius: 9999px; border: 1px solid var(--border, oklch(0.9189 0 0)); background: transparent; color: var(--foreground, oklch(0.1908 0 0)); font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; line-height: 1.4; font-weight: 500; text-decoration: none; transition: background-color 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-outline svg { transition: transform 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-outline:hover { background: var(--secondary, oklch(0.9601 0 0)); } .ds-btn-outline:hover svg { transform: translateX(2px); } .ds-btn-outline:focus-visible { outline: 2px solid var(--chart-1, oklch(0.646 0.184 45)); outline-offset: 3px; }
+.ds-btn-round { display: inline-flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; border-radius: 9999px; border: 1px solid var(--border, oklch(0.9189 0 0)); color: var(--foreground, oklch(0.1908 0 0)); transition: background-color 150ms cubic-bezier(0.4,0,0.2,1), color 150ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-round:hover { background: var(--foreground, oklch(0.1908 0 0)); color: var(--background, oklch(0.9911 0 0)); } .ds-btn-round:focus-visible { outline: 2px solid var(--chart-1, oklch(0.646 0.184 45)); outline-offset: 3px; }
+.ds-field { display: flex; flex-direction: column; gap: 0.5rem; max-width: 24rem; } .ds-field-label { font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 0.6875rem; line-height: 1; letter-spacing: 0.14em; font-weight: 500; text-transform: uppercase; color: var(--muted-foreground, oklch(0.4386 0 0)); } .ds-field-input { height: 3rem; padding: 0 1rem; border-radius: 0.625rem; border: 1px solid var(--input, oklch(0.62 0 0)); background: var(--background, oklch(0.9911 0 0)); color: var(--foreground, oklch(0.1908 0 0)); font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 1.1875rem; line-height: 1.6; outline: none; transition: border-color 150ms cubic-bezier(0.4,0,0.2,1); } .ds-field-input::placeholder { color: var(--muted-foreground, oklch(0.4386 0 0)); } .ds-field-input:focus-visible { border-color: var(--foreground, oklch(0.1908 0 0)); outline: 2px solid var(--chart-1, oklch(0.646 0.184 45)); outline-offset: 3px; }
+.ds-nav { display: flex; align-items: center; gap: 2rem; } .ds-nav-link { font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 0.6875rem; line-height: 1; letter-spacing: 0.14em; font-weight: 500; text-transform: uppercase; color: var(--muted-foreground, oklch(0.4386 0 0)); text-decoration: none; transition: color 150ms cubic-bezier(0.4,0,0.2,1); } .ds-nav-link:hover { color: var(--foreground, oklch(0.1908 0 0)); } .ds-nav-link[aria-current="page"] { color: var(--foreground, oklch(0.1908 0 0)); text-decoration: underline; text-decoration-color: var(--chart-1, oklch(0.646 0.184 45)); text-decoration-thickness: 2px; text-underline-offset: 6px; } .ds-nav-link:focus-visible { outline: 2px solid var(--chart-1, oklch(0.646 0.184 45)); outline-offset: 3px; }
+.ds-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; } .ds-badge { display: inline-flex; align-items: center; height: 1.5rem; padding: 0 0.625rem; border-radius: 9999px; background: var(--secondary, oklch(0.9601 0 0)); font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 0.6875rem; line-height: 1; letter-spacing: 0.14em; font-weight: 500; text-transform: uppercase; color: var(--muted-foreground, oklch(0.4386 0 0)); white-space: nowrap; }
+.ds-work { display: block; max-width: 28rem; color: var(--foreground, oklch(0.1908 0 0)); text-decoration: none; } .ds-work-tile { aspect-ratio: 4 / 3; overflow: hidden; border-radius: 0.875rem; background: var(--secondary, oklch(0.9601 0 0)); } .ds-work-photo { width: 100%; height: 100%; background: oklch(0.45 0 0); transition: transform 500ms ease-out; } .ds-work:hover .ds-work-photo { transform: scale(1.03); } .ds-work-meta { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; margin-top: 1.25rem; } .ds-work-title { margin: 0; font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.1; letter-spacing: -0.02em; font-weight: 500; } .ds-work:hover .ds-work-title { text-decoration: underline; } .ds-work-year { font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 0.6875rem; line-height: 1; letter-spacing: 0.14em; font-weight: 500; text-transform: uppercase; color: var(--muted-foreground, oklch(0.4386 0 0)); padding-top: 0.5rem; flex-shrink: 0; } .ds-work-badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.75rem; } .ds-work .ds-badge { display: inline-flex; align-items: center; height: 1.5rem; padding: 0 0.625rem; border-radius: 9999px; background: var(--secondary, oklch(0.9601 0 0)); font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 0.6875rem; line-height: 1; letter-spacing: 0.14em; font-weight: 500; text-transform: uppercase; color: var(--muted-foreground, oklch(0.4386 0 0)); } .ds-work:focus-visible { outline: 2px solid var(--chart-1, oklch(0.646 0.184 45)); outline-offset: 3px; }
+.ds-faq { border-top: 1px solid var(--border, oklch(0.9189 0 0)); max-width: 48rem; } .ds-faq-row { border-bottom: 1px solid var(--border, oklch(0.9189 0 0)); } .ds-faq-q { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.75rem 0; cursor: pointer; list-style: none; font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 1.375rem; line-height: 1.2; letter-spacing: -0.015em; font-weight: 500; color: var(--foreground, oklch(0.1908 0 0)); } .ds-faq-q::-webkit-details-marker { display: none; } .ds-faq-q svg { flex-shrink: 0; transition: transform 150ms cubic-bezier(0.4,0,0.2,1); } .ds-faq-row[open] .ds-faq-q svg { transform: rotate(45deg); } .ds-faq-q:focus-visible { outline: 2px solid var(--chart-1, oklch(0.646 0.184 45)); outline-offset: 3px; } .ds-faq-a { margin: 0; padding-bottom: 1.75rem; max-width: 42rem; font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); font-size: 0.9375rem; line-height: 1.65; color: var(--muted-foreground, oklch(0.4386 0 0)); }
+.ds-stage { display: block; width: 100%; max-width: 360px; height: auto; font-family: var(--font-sans, "Inter Variable", ui-sans-serif, system-ui, sans-serif); } .ds-stage-wire { fill: none; stroke: var(--foreground, oklch(0.1908 0 0)); stroke-width: 1; } .ds-stage-live { fill: none; stroke: var(--chart-1, oklch(0.646 0.184 45)); stroke-width: 2; } .ds-stage-ring { fill: var(--background, oklch(0.9911 0 0)); stroke: var(--foreground, oklch(0.1908 0 0)); stroke-width: 1; } .ds-stage-lit { fill: var(--chart-1, oklch(0.646 0.184 45)); stroke: var(--chart-1, oklch(0.646 0.184 45)); stroke-width: 1; } .ds-stage text { text-anchor: middle; fill: var(--foreground, oklch(0.1908 0 0)); } .ds-stage-num { font-size: 11px; letter-spacing: 0.14em; font-weight: 500; } .ds-stage-title { font-size: 15px; font-weight: 500; }
+.ds-scene { display: block; width: 100%; max-width: 600px; height: auto; aspect-ratio: 4 / 3; } .ds-scene-block { fill: var(--secondary, oklch(0.9601 0 0)); stroke: var(--foreground, oklch(0.1908 0 0)); } .ds-scene-wire { fill: none; stroke: var(--muted-foreground, oklch(0.4386 0 0)); } .ds-scene-arc { stroke-dasharray: 6 5; } .ds-scene-signal { fill: var(--chart-1, oklch(0.646 0.184 45)); stroke: none; }
+</style>
+
+<header class="top">
+  <div class="shell">
+    <span class="h6">Lucas Teixeira</span>
+    <nav aria-label="Sections"><a class="tagline" href="#overview">Overview</a><a class="tagline" href="#colors">Colors</a><a class="tagline" href="#typography">Typography</a><a class="tagline" href="#layout">Layout</a><a class="tagline" href="#depth">Depth</a><a class="tagline" href="#shapes">Shapes</a><a class="tagline" href="#components">Components</a><a class="tagline" href="#guardrails">Do and don't</a></nav>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="hero">
+    <h1 class="h1">The Working Drawing</h1>
+    <div class="hero-meta">
+      <p class="tagline">Design system for lucastexr-site</p>
+      <p class="tagline">DESIGN.md, refreshed 7 October 2026</p>
+      <p class="tagline">Light mode only</p>
+    </div>
+  </div>
+
+  <section class="block" id="overview">
+    <div class="head"><h2 class="h2">Overview</h2></div>
+    <div class="content"><p class="body-lg">The site reads like an engineer's sheet that a designer drew. Black ink on near white paper, hairline wires, numbered stages, and a single orange mark that shows what is moving or where you are. Nothing is decorated. The page earns attention through scale: an 80px headline beside an 11px uppercase label, a full width case study cover beside a quiet facts column. That jump in size is the brutalism here, not boxes, rules or heavy borders.</p><p class="body-lg">The drawing metaphor is literal on the home page. The process diagram is an animated system figure in the same ink and the same orange, built from the IEEE 1016 design description model and the SyRS data flow shape. The candidate home at <code>/next</code> turns the same figure into a small isometric model in three.js: same topology, same 12 second signal, same tokens. Everything else on the site borrows its restraint: monochrome neutrals with zero chroma, flat surfaces, pill actions, and photographs as the only full color on the page.</p><p class="body-lg">Density is low and the rhythm is generous. One shell width aligns every section. Light mode only: there is no dark theme and no <code>dark:</code> variant anywhere in the shipped components.</p><ul class="keys"><li>Ink on paper. Every neutral has zero chroma.</li><li>One warm accent, Signal Orange, at 5% of any page at most.</li><li>Inter only, nine type tokens, emphasis by size jump.</li><li>Flat: every shadow token resolves to <code>none</code>, no blur, no gradients.</li><li>Pill actions and tags, softly rounded image tiles, hairline dividers.</li><li>Headings stand alone. No label ever sits above a heading.</li><li>Motion is small and functional, and the diagram stills completely under reduced motion.</li><li>Work is the only full color. Case study covers and galleries carry the page; the frame around them stays grey.</li></ul></div>
+  </section>
+
+  <section class="block" id="colors">
+    <div class="head"><h2 class="h2">Colors</h2><p class="tagline">7 tokens, oklch</p></div>
+    <div class="content"><p class="body-lg lead">A greyscale drafting palette with one fired orange held in reserve.</p><div class="swatches">
+<article class="swatch is-signal">
+  <div class="chip" style="background:oklch(0.646 0.184 45)"></div>
+  <div class="swatch-text">
+    <h3 class="h5">Signal Orange</h3>
+    <p class="tagline">primary · signal</p>
+    <p class="value"><code>oklch(0.646 0.184 45)</code></p>
+    <p class="body muted">(<code>--chart-1</code>, exposed as <code>--color-signal</code>): the only warm color on the site. It marks three things and nothing else: what moves in the process diagram (the travelling dot, the drawn segment, the lit stage), keyboard focus on every page (2px outline, 3px offset), and position (the active nav underline and the case study Next arrow). It sits in a chart slot so a tweakcn theme paste can never leave the diagram colorless.</p>
+  </div>
+  <div class="ramp" aria-label="Tonal ramp for Signal Orange"><span style="background:#190400" title="#190400"></span><span style="background:#431701" title="#431701"></span><span style="background:#732c02" title="#732c02"></span><span style="background:#a64404" title="#a64404"></span><span style="background:#e45f02" title="#e45f02"></span><span style="background:#ff8950" title="#ff8950"></span><span style="background:#fec1a6" title="#fec1a6"></span><span style="background:#feeae0" title="#feeae0"></span></div>
+</article>
+<article class="swatch">
+  <div class="chip" style="background:oklch(0.1908 0 0)"></div>
+  <div class="swatch-text">
+    <h3 class="h5">Drawing Ink</h3>
+    <p class="tagline">neutral · ink</p>
+    <p class="value"><code>oklch(0.1908 0 0)</code></p>
+    <p class="body muted">(<code>--foreground</code>, also <code>--primary</code>): headlines, body text, diagram wires, primary pill fill, text selection background.</p>
+  </div>
+  <div class="ramp" aria-label="Tonal ramp for Drawing Ink"><span style="background:#141414" title="#141414"></span><span style="background:#2e2e2e" title="#2e2e2e"></span><span style="background:#525252" title="#525252"></span><span style="background:#7d7d7d" title="#7d7d7d"></span><span style="background:#a1a1a1" title="#a1a1a1"></span><span style="background:#d1d1d1" title="#d1d1d1"></span><span style="background:#e4e4e4" title="#e4e4e4"></span><span style="background:#fcfcfc" title="#fcfcfc"></span></div>
+</article>
+<article class="swatch">
+  <div class="chip" style="background:oklch(0.9911 0 0)"></div>
+  <div class="swatch-text">
+    <h3 class="h5">Drafting Paper</h3>
+    <p class="tagline">neutral · paper</p>
+    <p class="value"><code>oklch(0.9911 0 0)</code></p>
+    <p class="body muted">(<code>--background</code>): the page, input fields, and the knockout discs inside the diagram.</p>
+  </div>
+  <div class="ramp" aria-label="Tonal ramp for Drafting Paper"><span style="background:#141414" title="#141414"></span><span style="background:#2e2e2e" title="#2e2e2e"></span><span style="background:#525252" title="#525252"></span><span style="background:#7d7d7d" title="#7d7d7d"></span><span style="background:#a1a1a1" title="#a1a1a1"></span><span style="background:#d1d1d1" title="#d1d1d1"></span><span style="background:#e4e4e4" title="#e4e4e4"></span><span style="background:#fcfcfc" title="#fcfcfc"></span></div>
+</article>
+<article class="swatch">
+  <div class="chip" style="background:oklch(0.9601 0 0)"></div>
+  <div class="swatch-text">
+    <h3 class="h5">Vellum</h3>
+    <p class="tagline">neutral · vellum</p>
+    <p class="value"><code>oklch(0.9601 0 0)</code></p>
+    <p class="body muted">(<code>--secondary</code> and <code>--muted</code>): the contact form panel, empty image tiles, and the hover fill of outline pills.</p>
+  </div>
+  <div class="ramp" aria-label="Tonal ramp for Vellum"><span style="background:#141414" title="#141414"></span><span style="background:#2e2e2e" title="#2e2e2e"></span><span style="background:#525252" title="#525252"></span><span style="background:#7d7d7d" title="#7d7d7d"></span><span style="background:#a1a1a1" title="#a1a1a1"></span><span style="background:#d1d1d1" title="#d1d1d1"></span><span style="background:#e4e4e4" title="#e4e4e4"></span><span style="background:#fcfcfc" title="#fcfcfc"></span></div>
+</article>
+<article class="swatch">
+  <div class="chip" style="background:oklch(0.4386 0 0)"></div>
+  <div class="swatch-text">
+    <h3 class="h5">Graphite</h3>
+    <p class="tagline">neutral · graphite</p>
+    <p class="value"><code>oklch(0.4386 0 0)</code></p>
+    <p class="body muted">(<code>--muted-foreground</code>): taglines, secondary copy, FAQ answers, inactive nav labels, footer links. Roughly 7.5:1 on Drafting Paper.</p>
+  </div>
+  <div class="ramp" aria-label="Tonal ramp for Graphite"><span style="background:#141414" title="#141414"></span><span style="background:#2e2e2e" title="#2e2e2e"></span><span style="background:#525252" title="#525252"></span><span style="background:#7d7d7d" title="#7d7d7d"></span><span style="background:#a1a1a1" title="#a1a1a1"></span><span style="background:#d1d1d1" title="#d1d1d1"></span><span style="background:#e4e4e4" title="#e4e4e4"></span><span style="background:#fcfcfc" title="#fcfcfc"></span></div>
+</article>
+<article class="swatch">
+  <div class="chip" style="background:oklch(0.9189 0 0)"></div>
+  <div class="swatch-text">
+    <h3 class="h5">Hairline</h3>
+    <p class="tagline">neutral · hairline</p>
+    <p class="value"><code>oklch(0.9189 0 0)</code></p>
+    <p class="body muted">(<code>--border</code>): section dividers, the footer rule, FAQ row rules, outline pill borders.</p>
+  </div>
+  <div class="ramp" aria-label="Tonal ramp for Hairline"><span style="background:#141414" title="#141414"></span><span style="background:#2e2e2e" title="#2e2e2e"></span><span style="background:#525252" title="#525252"></span><span style="background:#7d7d7d" title="#7d7d7d"></span><span style="background:#a1a1a1" title="#a1a1a1"></span><span style="background:#d1d1d1" title="#d1d1d1"></span><span style="background:#e4e4e4" title="#e4e4e4"></span><span style="background:#fcfcfc" title="#fcfcfc"></span></div>
+</article>
+<article class="swatch">
+  <div class="chip" style="background:oklch(0.62 0 0)"></div>
+  <div class="swatch-text">
+    <h3 class="h5">Field Stroke</h3>
+    <p class="tagline">neutral · field-stroke</p>
+    <p class="value"><code>oklch(0.62 0 0)</code></p>
+    <p class="body muted">(<code>--input</code>): input and textarea borders only. Set at 0.62 lightness so a field edge clears 3:1 on both Drafting Paper and Vellum.</p>
+  </div>
+  <div class="ramp" aria-label="Tonal ramp for Field Stroke"><span style="background:#141414" title="#141414"></span><span style="background:#2e2e2e" title="#2e2e2e"></span><span style="background:#525252" title="#525252"></span><span style="background:#7d7d7d" title="#7d7d7d"></span><span style="background:#a1a1a1" title="#a1a1a1"></span><span style="background:#d1d1d1" title="#d1d1d1"></span><span style="background:#e4e4e4" title="#e4e4e4"></span><span style="background:#fcfcfc" title="#fcfcfc"></span></div>
+</article></div><div class="rules"><div class="rule"><p class="h6">The One Signal Rule</p><p class="body muted">Signal Orange covers 5% of any page at most. It marks motion, focus or position. It never fills a button, never colors body text, never decorates.</p></div><div class="rule"><p class="h6">The Zero Chroma Rule</p><p class="body muted">Every neutral is pure grey (chroma 0). Warmth comes from photographs and the signal, never from tinted paper or tinted text.</p></div><div class="rule"><p class="h6">The One Block Rule</p><p class="body muted">Colors change only inside the <code>TWEAKCN BLOCK</code> markers in <code>src/styles/global.css</code>. No component hardcodes a color.</p></div></div></div>
+  </section>
+
+  <section class="block" id="typography">
+    <div class="head"><h2 class="h2">Typography</h2><p class="tagline">Inter, nine sizes</p></div>
+    <div class="content"><p class="prose"><strong>Display Font:</strong> Inter Variable (with ui-sans-serif, system-ui, sans-serif)</p>
+<p class="prose"><strong>Body Font:</strong> Inter Variable (same stack)</p>
+<p class="prose"><strong>Label Font:</strong> Inter Variable, uppercase and tracked</p>
+<p class="prose"><strong>Character:</strong> One neutral grotesque doing every job, so hierarchy has to come from size, tracking and case. Display sizes run tight (negative tracking down to -0.035em, line height under 1); the tagline runs wide (0.14em) and small.</p>
+<p class="prose"><strong>Class merging.</strong> <code>cn</code> in <code>src/lib/utils.ts</code> declares the nine tokens as font sizes. Without that, the merge reads <code>text-h6</code> as a color and drops it beside <code>text-primary-foreground</code>.</p><div class="specimens">
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">h1</p>
+    <p class="tagline">400 · clamp(2.75rem, 6.5vw, 5rem) · lh 0.94 · ls -0.035em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:clamp(2.75rem, 6.5vw, 5rem);font-weight:400;line-height:0.94;letter-spacing:-0.035em;">Director of Design.</p>
+    <p class="body muted">page openers, the home hero, case study titles, the mobile menu items, CTA headings, stat values.</p>
+  </div>
+</div>
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">h2</p>
+    <p class="tagline">400 · clamp(2rem, 4vw, 3.25rem) · lh 0.98 · ls -0.03em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:clamp(2rem, 4vw, 3.25rem);font-weight:400;line-height:0.98;letter-spacing:-0.03em;">Container Alliance</p>
+    <p class="body muted">section headings, the featured work card title, essay rows, photo series names.</p>
+  </div>
+</div>
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">h3</p>
+    <p class="tagline">500 · clamp(1.5rem, 2.4vw, 2rem) · lh 1.1 · ls -0.02em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:clamp(1.5rem, 2.4vw, 2rem);font-weight:500;line-height:1.1;letter-spacing:-0.02em;">Tânia, 50 anos</p>
+    <p class="body muted">work card titles, the footer email, case study summaries, <code>h2</code> inside long form text.</p>
+  </div>
+</div>
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">h4</p>
+    <p class="tagline">500 · 1.375rem · lh 1.2 · ls -0.015em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:1.375rem;font-weight:500;line-height:1.2;letter-spacing:-0.015em;">How long does a project take?</p>
+    <p class="body muted">FAQ questions and blockquotes.</p>
+  </div>
+</div>
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">h5</p>
+    <p class="tagline">500 · 1.0625rem · lh 1.35 · ls -0.01em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:1.0625rem;font-weight:500;line-height:1.35;letter-spacing:-0.01em;">Approach</p>
+    <p class="body muted"><code>h3</code> inside long form text.</p>
+  </div>
+</div>
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">h6</p>
+    <p class="tagline">500 · 0.9375rem · lh 1.4 · ls 0em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:0.9375rem;font-weight:500;line-height:1.4;letter-spacing:0em;">See the work</p>
+    <p class="body muted">every pill label, hero collage rows, company names.</p>
+  </div>
+</div>
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">body-lg</p>
+    <p class="tagline">400 · 1.1875rem · lh 1.6 · ls -0.005em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:1.1875rem;font-weight:400;line-height:1.6;letter-spacing:-0.005em;">Lucas Teixeira is Director of Design at Fetchly Labs, leading 14 designers across Brazil and Latin America.</p>
+    <p class="body muted">intros, long form case study and essay text (held to <code>max-w-3xl</code>, about 48rem), form field text.</p>
+  </div>
+</div>
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">body</p>
+    <p class="tagline">400 · 0.9375rem · lh 1.65 · ls 0em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:0.9375rem;font-weight:400;line-height:1.65;letter-spacing:0em;">Case studies in product design, discovery, DesignOps and Webflow.</p>
+    <p class="body muted">default text, FAQ answers, service lists, case study facts.</p>
+  </div>
+</div>
+<div class="specimen">
+  <div class="spec-meta">
+    <p class="h6">tagline</p>
+    <p class="tagline">500 · 0.6875rem · lh 1 · ls 0.14em</p>
+  </div>
+  <div class="spec-body">
+    <p class="spec-sample" style="font-size:0.6875rem;font-weight:500;line-height:1;letter-spacing:0.14em;text-transform:uppercase;color:var(--graphite);">Brasília</p>
+    <p class="body muted">meta rows under a heading, field and fact labels, nav links, badges, figure captions.</p>
+  </div>
+</div></div><div class="rules"><div class="rule"><p class="h6">The Nine Sizes Rule</p><p class="body muted">Only these nine tokens exist. Each one carries its own size, line height, tracking and weight, so <code>text-h2</code> is the whole decision. No arbitrary <code>text-[...]</code> sizes, no <code>font-bold</code>.</p></div><div class="rule"><p class="h6">The Semibold Ceiling Rule</p><p class="body muted">Weights stop at 600, and the shipped tokens use only 400 and 500. <code>font-synthesis-weight: none</code> keeps the browser from faking anything heavier.</p></div><div class="rule"><p class="h6">The Scale Jump Rule</p><p class="body muted">Emphasis is a jump in size, never a box, a rule or a color. An h1 beside a tagline is the signature contrast.</p></div><div class="rule"><p class="h6">The Bare Heading Rule</p><p class="body muted">Nothing sits above a heading: no eyebrow, no kicker, no section label. Meta goes below the heading, beside it in a facts column, or into the copy.</p></div></div></div>
+  </section>
+
+  <section class="block" id="layout">
+    <div class="head"><h2 class="h2">Layout</h2><p class="tagline">One shell, 86rem</p></div>
+    <div class="content"><p class="prose">One container governs every section: the shell, centered, 86rem wide at most, with a 1.25rem gutter that grows to 2rem from 768px. Sections stack with 3.5rem of vertical padding, 5rem from 640px; the closing CTA band gets 6rem, then 8rem. The sticky header is 5rem tall, and anchor scrolling leaves the same 5rem of room.</p>
+<p class="prose">Grids are simple and content led. Work cards run one column, then two from 768px, under a full width 16:9 feature card. Services run one, two, then three columns. Case studies split into a 16rem sticky facts column and a reading column from 1024px. The home hero puts copy beside a three column photo collage that stretches to the copy height from 1024px. Breakpoints are the Tailwind defaults: 640, 768, 1024, 1280px.</p>
+<p class="prose">The process diagram keeps a 900px minimum width and scrolls sideways inside its own frame on narrow screens, with the scrollbar hidden. That is a known gap: on a phone the right half of the figure is cut off with no cue that it scrolls, and the frame is not keyboard reachable. The 2026-10-07 audit tracks it for <code>/impeccable adapt</code>. The <code>/next</code> model has no such problem: it scales inside a 4:3 box at any width.</p><div class="split"><div><h3 class="h5 sub">Spacing tokens, drawn to scale</h3><ul class="scale"><li><span class="tagline">unit</span><span class="bar-wrap"><span class="bar" style="width:0.25rem"></span></span><code>0.25rem</code></li><li><span class="tagline">gutter</span><span class="bar-wrap"><span class="bar" style="width:1.25rem"></span></span><code>1.25rem</code></li><li><span class="tagline">gutter-md</span><span class="bar-wrap"><span class="bar" style="width:2.0rem"></span></span><code>2rem</code></li><li><span class="tagline">section</span><span class="bar-wrap"><span class="bar" style="width:3.5rem"></span></span><code>3.5rem</code></li><li><span class="tagline">section-sm</span><span class="bar-wrap"><span class="bar" style="width:5.0rem"></span></span><code>5rem</code></li><li><span class="tagline">cta</span><span class="bar-wrap"><span class="bar" style="width:6.0rem"></span></span><code>6rem</code></li><li><span class="tagline">cta-sm</span><span class="bar-wrap"><span class="bar" style="width:8.0rem"></span></span><code>8rem</code></li><li><span class="tagline">nav-height</span><span class="bar-wrap"><span class="bar" style="width:5.0rem"></span></span><code>5rem</code></li><li><span class="tagline">shell-max</span><span class="bar-wrap"><span class="body muted">86rem, the width of every section</span></span><code>86rem</code></li></ul></div><div><h3 class="h5 sub">Breakpoints</h3><ul class="bps"><li><code>640px</code><span class="tagline">sm</span></li><li><code>768px</code><span class="tagline">md</span></li><li><code>1024px</code><span class="tagline">lg</span></li><li><code>1280px</code><span class="tagline">xl</span></li></ul></div></div><div class="rules"><div class="rule"><p class="h6">The One Shell Rule</p><p class="body muted">Every section uses the <code>shell</code> utility. Nothing sets its own max width or side padding, so every left edge lines up.</p></div></div></div>
+  </section>
+
+  <section class="block" id="depth">
+    <div class="head"><h2 class="h2">Elevation &amp; Depth</h2><p class="tagline">Flat</p></div>
+    <div class="content"><p class="prose">Flat. Every shadow token in the theme resolves to <code>none</code>, and there is no blur or backdrop filter anywhere. Depth comes from tone and content: Vellum panels and tiles sit on Drafting Paper, photographs carry their own depth, and the sticky header separates from content by being opaque paper, not by a shadow.</p><div class="rules"><div class="rule"><p class="h6">The Flat Sheet Rule</p><p class="body muted">Surfaces never lift. A state change is a fill swap, an opacity step or a 2px nudge, never a shadow.</p></div></div></div>
+  </section>
+
+  <section class="block" id="shapes">
+    <div class="head"><h2 class="h2">Shapes</h2><p class="tagline">Three radii</p></div>
+    <div class="content"><p class="prose">Three radii and nothing else. Actions and badges are full pills (9999px). Image tiles, case study covers and the form panel use a soft 14px corner (<code>rounded-xl</code>, the 10px base radius plus 4px). Input fields and the small photo grid tiles use the 10px base (<code>rounded-lg</code>). Diagram inputs and the output node are pills too, so the figure and the page share one silhouette. Rules are 1px hairlines, drawn with the <code>Separator</code> component or a Hairline border; the only thicker line is the 2px signal underline on the active nav link and the 2px rule beside long form blockquotes.</p>
+<div class="shapes">
+  <figure><div class="shape-pill">See the work</div><figcaption class="tagline">Pill · 9999px · anything you press or tag</figcaption></figure>
+  <figure><div class="shape-tile"></div><figcaption class="tagline">Tile · 0.875rem · anything you look at</figcaption></figure>
+  <figure><div class="shape-field">you@company.com</div><figcaption class="tagline">Field · 0.625rem · anything you type into</figcaption></figure>
+</div><div class="rules"><div class="rule"><p class="h6">The Three Radii Rule</p><p class="body muted">Pills for anything you press or tag, 14px for anything you look at, 10px for anything you type into.</p></div></div></div>
+  </section>
+
+  <section class="block" id="components">
+    <div class="head"><h2 class="h2">Components</h2><p class="tagline">10 live samples</p></div>
+    <div class="content"><p class="body-lg lead">Quiet and exact. Flat ink pills, hairline borders, motion only as a small nudge. Nothing competes with the headline.</p><div class="comps">
+<article class="comp">
+  <div class="stage"><a href="#" class="ds-btn-primary">See the work <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+  <div class="comp-text">
+    <h3 class="h5">Primary Pill</h3>
+    <p class="tagline">button · button-primary</p>
+    <p class="body muted">Ink pill for the one main action of a section.</p>
+  </div>
+</article>
+<article class="comp">
+  <div class="stage"><a href="#" class="ds-btn-outline">All work <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a></div>
+  <div class="comp-text">
+    <h3 class="h5">Outline Pill</h3>
+    <p class="tagline">button · button-outline</p>
+    <p class="body muted">Hairline pill for secondary actions; fills with Vellum on hover.</p>
+  </div>
+</article>
+<article class="comp">
+  <div class="stage"><a href="#process" class="ds-btn-round" aria-label="Jump to how I work"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg></a></div>
+  <div class="comp-text">
+    <h3 class="h5">Round Jump</h3>
+    <p class="tagline">button · button-round</p>
+    <p class="body muted">Circle with an arrow that jumps to the process section; fills with ink on hover.</p>
+  </div>
+</article>
+<article class="comp">
+  <div class="stage"><div class="ds-field"><label for="ds-email" class="ds-field-label">Email</label><input id="ds-email" class="ds-field-input" type="email" placeholder="you@company.com" /></div></div>
+  <div class="comp-text">
+    <h3 class="h5">Text Field</h3>
+    <p class="tagline">input · input</p>
+    <p class="body muted">Paper field with a Field Stroke border and a tagline label; border turns ink on focus.</p>
+  </div>
+</article>
+<article class="comp is-wide">
+  <div class="stage"><nav class="ds-nav" aria-label="Main"><a href="#" class="ds-nav-link" aria-current="page">Work</a><a href="#" class="ds-nav-link">About</a><a href="#" class="ds-nav-link">Writing</a><a href="#" class="ds-nav-link">Contact</a></nav></div>
+  <div class="comp-text">
+    <h3 class="h5">Main Navigation</h3>
+    <p class="tagline">nav · nav-link</p>
+    <p class="body muted">Tagline links; the active page gets a 2px Signal Orange underline.</p>
+  </div>
+</article>
+<article class="comp">
+  <div class="stage"><div class="ds-badges"><span class="ds-badge">DesignOps</span><span class="ds-badge">CRM design</span><span class="ds-badge">SEO migration</span></div></div>
+  <div class="comp-text">
+    <h3 class="h5">Badge</h3>
+    <p class="tagline">chip · badge</p>
+    <p class="body muted">Vellum pill with tagline text for services; no border, so it never reads as a button.</p>
+  </div>
+</article>
+<article class="comp">
+  <div class="stage"><a href="#" class="ds-work"><div class="ds-work-tile"><div class="ds-work-photo"></div></div><div class="ds-work-meta"><div><h3 class="ds-work-title">Container Alliance</h3><div class="ds-work-badges"><span class="ds-badge">DesignOps</span><span class="ds-badge">CRM design</span></div></div><span class="ds-work-year">2024</span></div></a></div>
+  <div class="comp-text">
+    <h3 class="h5">Work Card</h3>
+    <p class="tagline">card · image-tile</p>
+    <p class="body muted">Photo in a Vellum tile over an h3 title and a tagline year; photo zooms 3% and title underlines on hover.</p>
+  </div>
+</article>
+<article class="comp is-wide">
+  <div class="stage"><div class="ds-faq"><details class="ds-faq-row" open><summary class="ds-faq-q">Where is your work history?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary><p class="ds-faq-a">On the About page, newest role first.</p></details><details class="ds-faq-row"><summary class="ds-faq-q">Do you work with US teams?<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></summary><p class="ds-faq-a">Yes, remotely from Brasília.</p></details></div></div>
+  <div class="comp-text">
+    <h3 class="h5">FAQ Row</h3>
+    <p class="tagline">custom · label</p>
+    <p class="body muted">Native details row between Hairline rules; the plus turns into a cross when open.</p>
+  </div>
+</article>
+<article class="comp is-wide">
+  <div class="stage"><svg class="ds-stage" viewBox="0 0 360 120" role="img" aria-label="Discovery lit, Domain and flows next"><path class="ds-stage-wire" d="M 116 50 H 236"/><path class="ds-stage-live" d="M 116 50 H 176"/><circle class="ds-stage-lit" cx="90" cy="50" r="26"/><text class="ds-stage-num ds-stage-num-lit" x="90" y="55">01</text><circle class="ds-stage-ring" cx="262" cy="50" r="26"/><text class="ds-stage-num" x="262" y="55">02</text><text class="ds-stage-title" x="90" y="104">Discovery</text><text class="ds-stage-title" x="262" y="104">Domain and flows</text></svg></div>
+  <div class="comp-text">
+    <h3 class="h5">Process Stage</h3>
+    <p class="tagline">custom · signal</p>
+    <p class="body muted">Two stages of the signature diagram: ink rings and wires, the active stage lit in Signal Orange.</p>
+  </div>
+</article>
+<article class="comp is-wide">
+  <div class="stage"><svg class="ds-scene" viewBox="0 0 600 450" fill="none" stroke-width="1.5" role="img" aria-label="Three inputs feed five stages and one output, with a dashed feedback arc from review to discovery"><rect class="ds-scene-block" x="30" y="173" width="24" height="24"/><path class="ds-scene-wire" d="M54 185 H100 L128 225"/><rect class="ds-scene-block" x="30" y="213" width="24" height="24"/><path class="ds-scene-wire" d="M54 225 H100 L128 225"/><rect class="ds-scene-block" x="30" y="253" width="24" height="24"/><path class="ds-scene-wire" d="M54 265 H100 L128 225"/><rect class="ds-scene-block" x="128" y="203" width="44" height="44"/><path class="ds-scene-wire" d="M172 225 H208"/><rect class="ds-scene-block" x="208" y="203" width="44" height="44"/><path class="ds-scene-wire" d="M252 225 H288"/><rect class="ds-scene-block" x="288" y="203" width="44" height="44"/><path class="ds-scene-wire" d="M332 225 H368"/><rect class="ds-scene-block" x="368" y="203" width="44" height="44"/><path class="ds-scene-wire" d="M412 225 H448"/><rect class="ds-scene-block" x="448" y="203" width="44" height="44"/><path class="ds-scene-wire" d="M492 225 H526"/><rect class="ds-scene-block" x="526" y="193" width="64" height="64"/><path class="ds-scene-wire ds-scene-arc" d="M390 200 Q270 70 150 200"/><rect class="ds-scene-signal" x="303" y="218" width="14" height="14"/></svg></div>
+  <div class="comp-text">
+    <h3 class="h5">Systems Scene Poster</h3>
+    <p class="tagline">custom · signal</p>
+    <p class="body muted">The /next hero before WebGL loads, copied from SystemsScene.astro: three input blocks, five stage blocks, one output block, a dashed feedback arc, and the signal in Signal Orange. The three.js model fades in over it on idle.</p>
+  </div>
+</article></div><h3 class="h4 specs-title">Specifications</h3><div class="spec-grid"><div class="spec-block"><h3 class="h5 sub">Buttons</h3><ul class="list"><li><strong>Source:</strong> the shadcn <code>Button</code> in <code>src/components/ui/button.tsx</code>, restyled to the pill system. React blocks use <code>&lt;Button asChild&gt;</code> around an anchor; Astro pages put <code>buttonVariants()</code> on the <code>a</code> or <code>button</code> directly, because <code>asChild</code> cannot wrap Astro children.</li><li><strong>Shape:</strong> full pill (9999px), 3rem tall, 2rem side padding, h6 label.</li><li><strong>Primary:</strong> Drawing Ink fill, Drafting Paper label, optional 16px arrow icon after the label. Used for the main action of a section: "See the work", the CTA, the form submit.</li><li><strong>Hover / Focus:</strong> primary drops to 85% opacity and its arrow nudges 2px right. Focus is the global 2px Signal Orange outline at 3px offset.</li><li><strong>Outline:</strong> transparent with a Hairline border and an ink label; hover fills it with Vellum. Used for secondary actions such as "Get in touch", "All work", "The five steps in detail".</li><li><strong>Round</strong> (<code>variant="round" size="icon"</code>): a 3.5rem circle with a Hairline border and a 20px arrow; hover fills it with ink and turns the arrow paper. Used once, in the home hero, to jump to the process.</li><li><strong>Focus:</strong> the button sets no ring and no <code>outline-none</code>, so the global Signal Orange outline always shows.</li></ul></div><div class="spec-block"><h3 class="h5 sub">Badges</h3><ul class="list"><li><strong>Source:</strong> the shadcn <code>Badge</code> in <code>src/components/ui/badge.tsx</code>, restyled.</li><li><strong>Style:</strong> a 1.5rem pill, Vellum fill, no border, Graphite tagline text. The fill and the missing border keep it from reading as an outline button.</li><li><strong>Use:</strong> services on work cards and in the case study facts column. Three per card at most.</li></ul></div><div class="spec-block"><h3 class="h5 sub">Separators</h3><p class="prose">The shadcn <code>Separator</code>: a decorative 1px Hairline rule. It opens the footer and sits above the case study Next link.</p></div><div class="spec-block"><h3 class="h5 sub">Cards / Containers</h3><ul class="list"><li><strong>Work card:</strong> an image tile (Vellum fill under the photo, 14px corner, 4:3 or 16:9 for the feature) over an h3 title (h2 for the feature) with a tagline year at the right and service badges below. No border, no background, no shadow. Hover scales the photo 3% over 500ms ease out and underlines the title.</li><li><strong>Form panel:</strong> Vellum, 14px corner, 2rem padding (2.5rem from 640px). The only filled container on the site.</li><li><strong>Essay row:</strong> a 3:2 image tile beside an h2 title, a Graphite summary and the date below it, same hover as the work card.</li></ul></div><div class="spec-block"><h3 class="h5 sub">Inputs / Fields</h3><ul class="list"><li><strong>Style:</strong> Drafting Paper fill, 1px Field Stroke border, 10px corner, 3rem tall, body-lg text, Graphite placeholder. A tagline label sits above each field.</li><li><strong>Focus:</strong> the border turns Drawing Ink, plus the global Signal Orange focus outline.</li><li><strong>Error / Disabled:</strong> not designed. The form relies on native <code>required</code> validation.</li></ul></div><div class="spec-block"><h3 class="h5 sub">Navigation</h3><ul class="list"><li><strong>Desktop:</strong> the monogram at left, tagline links at right with 2rem gaps. Inactive links are Graphite and turn ink on hover. The active link is ink with a 2px Signal Orange underline at 6px offset.</li><li><strong>Mobile:</strong> a 44px "Menu" text button opens a full screen paper panel listing each page at h1 size, one per line. The active page sits at 40% opacity. Escape closes it and returns focus to the button.</li><li><strong>Footer:</strong> the email address at h3 with an underline, tagline column headers, Graphite links, then the full width wordmark.</li></ul></div><div class="spec-block"><h3 class="h5 sub">FAQ</h3><p class="prose">Native <code>details</code> rows between Hairline rules. The question is h4 with a 20px plus icon at 1.5 stroke that turns 45 degrees into a cross when open. The answer is Graphite body text, 42rem wide at most. It opens without JavaScript.</p></div><div class="spec-block"><h3 class="h5 sub">Stats</h3><p class="prose">A value at h1 over a tagline label, built as <code>dt</code>/<code>dd</code> pairs. One column, then two from 640px.</p></div><div class="spec-block"><h3 class="h5 sub">Process Diagram (signature)</h3><p class="prose">An inline SVG system figure: three pill inputs wire into five numbered ring stages, ending in a pill output, with a dashed feedback loop back to the start. Wires are 1px ink. One 12 second linear loop sends a Signal Orange dot along the spine. Each stage lights orange and pulses as the dot arrives, and a return dot rides the loop. No JavaScript. Under reduced motion every segment shows drawn and nothing moves. A <code>background</code> variant drops the labels and sits at 50% opacity behind copy.</p></div><div class="spec-block"><h3 class="h5 sub">Systems Scene (<code>/next</code> hero)</h3><ul class="list"><li><strong>Source:</strong> <code>src/components/three/SystemsScene.astro</code> (poster and loader) and <code>src/components/three/systems-scene.ts</code> (the scene). No framework runtime.</li><li><strong>Model:</strong> three small input blocks, five stage blocks, one larger output block, a dashed arc from review back to discovery. Orthographic camera at a fixed isometric angle. Flat <code>MeshLambertMaterial</code> faces with ink edge lines; one ambient and one directional light. No textures, blur or gradient fills.</li><li><strong>Color:</strong> every color is read from the tokens at mount (<code>--foreground</code>, <code>--secondary</code>, <code>--muted-foreground</code>, <code>--chart-1</code>), so a theme paste reaches the scene.</li><li><strong>Loading:</strong> the poster is an inline SVG of the same figure, drawn before any script runs. A plain script waits for <code>requestIdleCallback</code> (2s timeout, <code>setTimeout</code> fallback), then imports three.js and the scene as their own chunk. The poster fades out over 700ms once the canvas has drawn, and stays if WebGL is missing.</li><li><strong>Motion:</strong> the signal travels the line on the 12 second loop of the SVG diagram, and each stage scales up as it passes. The camera sways slowly. Pointer drag turns the model within limits (yaw ±1.2, pitch ±0.3 radians) and eases back on release. The loop runs only while the scene is on screen (<code>IntersectionObserver</code>), and the pixel ratio is capped at 2.</li><li><strong>Reduced motion:</strong> one still pose with the signal parked mid line. No loop. Drag still turns it and snaps back on release.</li><li><strong>Accessibility:</strong> the host is <code>role="img"</code> with a label that describes the figure; the poster and canvas are hidden from assistive tech.</li></ul></div><div class="spec-block"><h3 class="h5 sub">Images</h3><ul class="list"><li><strong>Source:</strong> <code>src/components/Img.astro</code> for Astro pages and <code>src/components/Image.tsx</code> for React blocks, both built on <code>sized</code> and <code>imgProps</code> in <code>src/lib/img.ts</code>.</li><li><strong>Pipeline:</strong> files live in <code>/public/images</code> so the CMS can write to them. In production every URL goes through the Netlify Image CDN (<code>/.netlify/images?url=...&amp;w=...&amp;q=72</code>) with a <code>srcset</code> of 480, 768, 1080, 1440 and 1920px and a <code>sizes</code> hint. There is no <code>fm</code> parameter: the CDN picks AVIF or WebP from the Accept header. In dev the original file is served.</li><li><strong>Netlify only:</strong> on any other host the CDN path 404s. Moving hosts means swapping <code>sized</code> for that host's resizer, in one place.</li><li><strong>Priority by position:</strong> whatever is in the first viewport loads <code>eager</code> with <code>fetchpriority="high"</code>: the first home collage tile, the first two cards on <code>/work</code>, the case study cover, the first photograph. Everything else is <code>lazy</code> with <code>decoding="async"</code>. A component never decides this for itself; the page passes it.</li><li><strong>No layout shift:</strong> every image gets real <code>width</code> and <code>height</code> or sits in a fixed aspect box.</li><li><strong>Case study assets:</strong> covers are 2400 by 1600 with the subject centered, because cards crop them to 4:3 and the feature card to 16:9. Gallery images keep their own ratio, and each image's <code>alt</code> doubles as its figure caption in tagline style.</li></ul></div><div class="spec-block"><h3 class="h5 sub">Motion</h3><ul class="list"><li><strong>Hover:</strong> an 85% opacity step on primary pills, a Vellum fill on outline pills, a 2px arrow nudge, a 3% photo zoom over 500ms ease out.</li><li><strong>Loops:</strong> only the process diagram (12 seconds, linear, CSS only) and the <code>/next</code> model on the same clock. Nothing else animates on its own.</li><li><strong>Reduced motion:</strong> every loop has a designed still state. The diagram shows every segment drawn with the dot at rest; the model holds one pose.</li></ul></div><div class="spec-block"><h3 class="h5 sub">Links</h3><p class="prose">Inline links in long form text and contact details are ink with a 40% ink underline at 4px offset; hover darkens the underline to full ink.</p></div></div><div class="rules"><div class="rule"><p class="h6">The Poster First Rule</p><p class="body muted">Anything heavy draws a real HTML or SVG poster first and loads its script on idle. The site ships no framework runtime.</p></div><div class="rule"><p class="h6">The Position Priority Rule</p><p class="body muted">The page, not the component, decides image priority. Only the first viewport loads eager with <code>fetchpriority="high"</code>.</p></div></div></div>
+  </section>
+
+  <section class="block" id="guardrails">
+    <div class="head"><h2 class="h2">Do's and Don'ts</h2></div>
+    <div class="content"><div class="dd"><div><h3 class="h4">Do</h3><ul class="list"><li><strong>Do</strong> wrap every section in the <code>shell</code> utility (86rem max, 1.25rem gutter, 2rem from 768px).</li><li><strong>Do</strong> use the nine type tokens and nothing else. Pick <code>text-h2</code>, not a size plus a weight plus a tracking.</li><li><strong>Do</strong> build every action from <code>Button</code> or <code>buttonVariants</code>: a 3rem pill with an h6 label; ink fill for the primary, Hairline outline for the rest.</li><li><strong>Do</strong> reserve Signal Orange for motion, focus and position, and keep it under 5% of the page.</li><li><strong>Do</strong> put photos in Vellum tiles with a 14px corner, and pass real width and height to <code>Img</code>.</li><li><strong>Do</strong> keep hover small: an 85% opacity step, a Vellum fill, a 2px arrow nudge, or a 3% photo zoom over 500ms.</li><li><strong>Do</strong> give every animation a still state under <code>prefers-reduced-motion</code>.</li><li><strong>Do</strong> change colors, radius and fonts only inside the <code>TWEAKCN BLOCK</code> in <code>src/styles/global.css</code>.</li><li><strong>Do</strong> set image priority from the page: eager and high priority for the first viewport only.</li><li><strong>Do</strong> keep heavy scripts off the critical path. Draw a real HTML or SVG poster first, then load the script on idle.</li><li><strong>Do</strong> crop case study covers to 2400 by 1600 with the subject centered, and write each gallery <code>alt</code> as a caption.</li></ul></div><div><h3 class="h4">Don't</h3><ul class="list is-dont"><li><strong>Don't</strong> add shadows, blur, backdrop filters or gradient fills. Every shadow token is <code>none</code> on purpose.</li><li><strong>Don't</strong> add a dark theme or any <code>dark:</code> variant. The site is light mode only.</li><li><strong>Don't</strong> introduce a second accent, tinted neutrals, or the Fetchly palette and fonts (Marjorie, Malibu cyan, Spring Green). This is the personal Lucas Teixeira brand. No neon green.</li><li><strong>Don't</strong> use boxes, heavy rules or colored borders for emphasis. Use a size jump.</li><li><strong>Don't</strong> set a weight above 600, use <code>font-bold</code>, or use any typeface other than Inter.</li><li><strong>Don't</strong> hand roll a pill with raw classes, and don't add <code>outline-none</code> or a ring to a control.</li><li><strong>Don't</strong> put an eyebrow, kicker or section label above a heading.</li><li><strong>Don't</strong> fill a button or color body text with Signal Orange.</li><li><strong>Don't</strong> add a framework island for something a plain script can do. The site ships no React runtime.</li><li><strong>Don't</strong> force a format (<code>fm</code>) on CDN image URLs, or mark an image eager inside a shared component.</li></ul></div></div></div>
+  </section>
+
+  <footer>
+    <p class="tagline">Source: lucastexr-site/DESIGN.md and .impeccable/design.json</p>
+    <p class="tagline">Sidecar generated 2026-10-07</p>
+  </footer>
+</main>
+
+</body></html>
